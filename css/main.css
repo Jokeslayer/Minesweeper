@@ -1,0 +1,75 @@
+
+
+body{
+    /*viewport units:
+    vh (viewport height),
+    vw (viewport width),
+    vmin (smallest between vh and vw)
+    */
+    height: 100vh;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header{
+    font-size: 4vmin;
+    letter-spacing: .5vmin;
+}
+
+#foundation{
+    margin: 2vmin;
+    border-radius: 1vmin;
+    border: 0.1 solid black;
+    background-color: darkgray;
+    height: 40%;
+    width: 80%;
+}
+
+#menu{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: left;
+}
+
+#status{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: darkgrey;
+    align-items: center;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 2px;
+}
+
+.counter{
+    background-color: black;
+    color: red;
+}
+
+#mine_count{
+    grid-column-start: 1;
+    width: 40px;
+}
+
+#smiley_face{
+    display: grid;
+    grid-column-start: 2;
+    height: 25px;
+    width:25px;
+    align-items: center;
+}
+
+#timer{
+    grid-column-start: 3;
+    align-self: right;
+    width: 40px;
+}
+
+#board{
+    border: 1px solid black;
+    margin: 2px;
+}
