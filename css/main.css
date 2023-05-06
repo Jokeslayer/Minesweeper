@@ -1,5 +1,6 @@
-
-
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    RAW HTML TAG FORMATTING
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 body{
     /*viewport units:
     vh (viewport height),
@@ -18,7 +19,13 @@ body{
 header{
     font-size: 4vmin;
     letter-spacing: .5vmin;
+    position: absolute;
+    top: 10px;
 }
+
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    DIV IDS
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
 #foundation{
     margin: 2vmin;
@@ -30,24 +37,23 @@ header{
 }
 
 #menu{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-content: left;
+    display: flex;
+    align-content: flex-start;
+    width: 80%;
+}
+
+#menu>button{
+    margin: 5px;
 }
 
 #status{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     background-color: darkgrey;
     align-items: center;
     border: 1px solid black;
     padding: 5px;
     margin: 2px;
-}
-
-.counter{
-    background-color: black;
-    color: red;
 }
 
 #mine_count{
@@ -56,11 +62,10 @@ header{
 }
 
 #smiley_face{
-    display: grid;
-    grid-column-start: 2;
+    display: flex;
     height: 25px;
     width:25px;
-    align-items: center;
+    justify-content: center;
 }
 
 #timer{
@@ -72,4 +77,39 @@ header{
 #board{
     border: 1px solid black;
     margin: 2px;
+}
+
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    CLASS FORMATS
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+.counter{
+    background-color: black;
+    color: red;
+}
+
+.button_info{
+    background-color: lightgray;
+    border: 1px solid black;
+    margin: 2px;
+
+    /*visibility: hidden;*/
+}
+
+.button_content{
+    padding: 5px;
+}
+
+.header{
+    display: flex;
+    background-color: blue;
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ex_out{
+    display: flex;
+    background-color: blue;
+    color: white;
 }

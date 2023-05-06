@@ -11,32 +11,34 @@
 <body>
     <header>Minesweeper</header>
     <div id="menu">
-        <button id="game">Game</button>
-        <button id="controls">Controls</button>
+        <button>Game</button>
+        <button>Controls</button>
     </div>
     <div id="foundation">
         <div id="status">
             <button class="counter" id="mine_count">000</button>
-            <button class="new_game_button" id="smiley_face"><img src="AV/smiley_face.png" height="25px" width="25"></button>
+            <button class="new_game_button" id="smiley_face"><img src="AV/smiley_face.png" height="20px" width="20"></button>
             <button class="counter" id="timer">000</button>
         </div>
         <div id="board">
 
         </div>
+        
+        
+    </div>
+    <div class="button_info">
+        <div class="header">Options <button class="ex_out">X</button></div>
+        <div class="button_content">Height Width Mines</div>
+        <div class="new_game_button" id="footer">New Game</button></div>
+    </div>
+    <div class="button_info">
+        <div class="header">Controls <button class="ex_out">X</button> </div>
         <div class="button_content">
-            <div class="header">Options <button class="ex_out">X</button></div>
-            <div>Height Width Mines</div>
-            <div class="new_game_button" id="footer">New Game</button></div>
-        </div>
-        <div class="button_content"">
-            <div class="header">Controls <button class="ex_out">X</button> </div>
-            <div>
-                <ul>
-                    <li><b>Left-Click</b> an empty square to reveal it.</li>
-                    <li><b>Right-click</b> (or <b>Ctrl+click</b>) an empty square to flag it.</li>
-                    <li>Click the Smiley Face to start a new game</li>
-                </ul>
-            </div>
+            <ul>
+                <li><b>Left-Click</b> an empty square to reveal it.</li>
+                <li><b>Right-click</b> (or <b>Ctrl+click</b>) an empty square to flag it.</li>
+                <li>Click the Smiley Face to start a new game</li>
+            </ul>
         </div>
     </div>
 </body>
