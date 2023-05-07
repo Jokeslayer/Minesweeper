@@ -28,8 +28,43 @@
     </div>
     <div class="button_info">
         <div class="header">Options <button class="ex_out">X</button></div>
-        <div class="button_content">Height Width Mines</div>
-        <div class="new_game_button" id="footer">New Game</button></div>
+        <table>
+            <tr>
+                <th></th><th></th>
+                <th>Height</th>
+                <th>Width</th>
+                <th>Mines</th>
+            </tr>
+            <tr>
+                <td><input id="beginner" type="radio" name="difficulty" value="beginner" checked="checked"></td>
+                <td>Beginner</td>
+                <td>9</td>
+                <td>9</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td><input id="intermediate" type="radio" name="difficulty" value="intermediate" checked></td>
+                <td>Intermediate</td>
+                <td>16</td>
+                <td>16</td>
+                <td>40</td>
+            </tr>
+            <tr>
+                <td><input id="expert" type="radio" name="difficulty" value="expert" checked></td>
+                <td>Expert</td>
+                <td>16</td>
+                <td>30</td>
+                <td>99</td>
+            </tr>
+            <tr>
+                <td><input id="custom" type="radio" name="difficulty" value="custom" checked></td>
+                <td>Custom</td>
+                <td><input type="number" name="difficulty" size="3" id="height" ></td>
+                <td><input type="number" name="difficulty" size="3" id="row" ></td>
+                <td><input type="number" name="difficulty" size="3" id="mines" ></td>
+            </tr>
+          </table>
+          <button id="footer">New Game</button> 
     </div>
     <div class="button_info">
         <div class="header">Controls <button class="ex_out">X</button> </div>

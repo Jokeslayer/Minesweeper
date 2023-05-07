@@ -79,6 +79,22 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     margin: 2px;
 }
 
+#footer{
+    display: flex;
+    align-items: center;
+    width: 100px;
+    margin: 10px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    justify-content: center;
+}
+
+#column_headers{
+    grid-column-start: 3;
+    grid-column-end: 5;
+}
+
+
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     CLASS FORMATS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -92,12 +108,21 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     background-color: lightgray;
     border: 1px solid black;
     margin: 2px;
-
+    
     /*visibility: hidden;*/
+}
+
+.button_info tr > th{
+    text-align: left;
+}
+
+.button_info tr > td >input{
+    width: 40px;
 }
 
 .button_content{
     padding: 5px;
+    align-items: left;
 }
 
 .header{
