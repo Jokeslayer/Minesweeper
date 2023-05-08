@@ -113,16 +113,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     }
     
     function createCells(row,col){
-        let table = document.createElement('table');
+       
         let count=0;
         for(let r=0;r<row;r++){
             board[r]=[];
+            let row_index = document.createElement('tr');
+            document.querySelector('#board').appendChild(row_index);
+            row_index.id=`r${row_index}`; 
             for(let c=0;c<col;c++){
                 board[r][c]=new CELL(row,col);
-                let cell = document.createElement('div');
-                /* console.log('creating new div');
-                document.getElementById('board').appendChild(cell);
-                console.log('appending div'); */
+                let cell=document.createElement('td');
+                cell.id=`r${row_index}c${c}`;
+                row_index.appendChild(cell);
             }
         }
     }

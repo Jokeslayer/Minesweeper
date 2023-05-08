@@ -154,11 +154,3 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     background-color: blue;
     color: white;
 }
-
-#board > div{
-    display: flex;
-    border: .01px solid black;
-    height: 15px;
-    width: 15px;
-    flex-wrap: wrap;
-}
