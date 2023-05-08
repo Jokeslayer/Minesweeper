@@ -23,6 +23,18 @@ header{
     top: 10px;
 }
 
+table{
+    border: .01px solid black;
+}
+
+tr{
+    border: .01px solid black;
+}
+
+td{
+    border: .01px solid black;
+}
+
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     DIV IDS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -72,11 +84,15 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     grid-column-start: 3;
     align-self: right;
     width: 40px;
+    
 }
 
 #board{
     border: 1px solid black;
-    margin: 2px;
+    margin: 10px;
+    height: 83%;
+    width: 97%; 
+
 }
 
 #footer{
@@ -137,4 +153,12 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     display: flex;
     background-color: blue;
     color: white;
+}
+
+#board > div{
+    display: flex;
+    border: .01px solid black;
+    height: 15px;
+    width: 15px;
+    flex-wrap: wrap;
 }
