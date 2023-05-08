@@ -11,8 +11,8 @@
 <body>
     <header>Minesweeper</header>
     <div id="menu">
-        <button>Game</button>
-        <button>Controls</button>
+        <button id="game_toggle">Game</button>
+        <button id="instruction_toggle">Controls</button>
     </div>
     <div id="foundation">
         <div id="status">
@@ -26,7 +26,7 @@
         
         
     </div>
-    <div class="button_info">
+    <div class="button_info" id="options">
         <div class="header">Options <button class="ex_out">X</button></div>
         <table>
             <tr>
@@ -66,7 +66,7 @@
           </table>
           <button id="footer">New Game</button> 
     </div>
-    <div class="button_info">
+    <div class="button_info" id="instructions">
         <div class="header">Controls <button class="ex_out">X</button> </div>
         <div class="button_content">
             <ul>

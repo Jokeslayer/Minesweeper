@@ -60,6 +60,8 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
   
     const playAgainBtn = document.getElementById('smiley_face');
+    const gameBtn = document.getElementById('game_toggle');
+    const instructionBtn = document.getElementById('instruction_toggle');
   
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     EVENT LISTENERS
@@ -70,7 +72,9 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     document.getElementById('board').addEventListener('mousedown',handleSweep);
 
     playAgainBtn.addEventListener('click',init);
-  
+    gameBtn.addEventListener('click',toggle_game_menu);
+    instructionBtn.addEventListener('click',toggle_instructions);
+
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     FUNCTIONS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -145,4 +149,23 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
     function flag(event){
     }
+
+    function toggle_game_menu(event){
+        let menu = document.getElementById('options');
+        if(menu.style.visibility === 'hidden'){
+            menu.style.visibility = 'visible';
+        }
+        else{
+            menu.style.visibility = 'hidden';
+        }
+    }
     
+    function toggle_instructions(event){
+        let menu = document.getElementById('instructions');
+        if(menu.style.visibility === 'hidden'){
+            menu.style.visibility = 'visible';
+        }
+        else{
+            menu.style.visibility = 'hidden';
+        }
+    }

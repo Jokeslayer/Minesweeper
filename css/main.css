@@ -124,8 +124,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     background-color: lightgray;
     border: 1px solid black;
     margin: 2px;
-    
-    /*visibility: hidden;*/
+    visibility: hidden;
 }
 
 .button_info tr > th{
