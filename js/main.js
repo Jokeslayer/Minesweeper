@@ -28,7 +28,7 @@ const DIF_SET = {
 CELL CLASS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
-class CELL{
+class Cell{
     constructor(row,col){
         this.column = col;
         this.row = row;
@@ -65,6 +65,10 @@ const gameBtn = document.getElementById('game_toggle');
 const instructionBtn = document.getElementById('instruction_toggle');
 const boardEl = document.querySelector('#board');
 
+const customRow = document.getElementById('row');
+const customHeight = document.getElementById('height');
+const customMines = document.getElementById('mines');
+
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 EVENT LISTENERS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -86,7 +90,6 @@ reset();
 // Initialize state and call render
 function init() {
     
-    console.log(board);
     winner = null;
     gameOver = false;
     render();
@@ -129,7 +132,7 @@ function createCells(row,col){
         boardEl.appendChild(row_index);
         row_index.id=`r${r}`;
         for(let c=0;c<col;c++){
-            board[r][c]=new CELL(row,col);
+            board[r][c]=new Cell(row,col);
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
             row_index.appendChild(cell);
@@ -177,7 +180,14 @@ function toggle_instructions(event){
 function reset(){
     boardEl.innerHTML = '';
     board = [];
+    console.log(customHeight.value);
+    console.log(customRow.value);
     difficulty = document.querySelector('input[name="difficulty"]:checked').value;
-    createBoard(DIF_SET[difficulty][0],DIF_SET[difficulty][1],DIF_SET[difficulty][2]);
-    init();
+    console.log(difficulty);
+    if(difficulty === "custom"){
+        createBoard(customRow.value,customHeight.value,customMines.value);
+    }
+    else{
+        createBoard(DIF_SET[difficulty][0],DIF_SET[difficulty][1],DIF_SET[difficulty][2]);
+    }
 }
