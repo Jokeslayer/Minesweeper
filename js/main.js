@@ -1,6 +1,8 @@
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     Constants
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+const AUDIO = new Audio('AV/wtf_boom.mp3');
+
 const COLORS = {
     '1': 'blue',
     '2': 'green',
@@ -60,11 +62,13 @@ let gameOver;     // boolean which determines whether a bomb has been clicked on
 CACHED ELEMENTS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
-const playAgainBtn = document.getElementById('smiley_face');
-const newGameBtn = document.getElementById('footer');
-const gameBtn = document.getElementById('game_toggle');
-const instructionBtn = document.getElementById('instruction_toggle');
-const boardEl = document.querySelector('#board');
+const playAgainBtnEl = document.getElementById('smiley_face');
+const newGameBtnEl = document.getElementById('footer');
+const difficultyBtnEl = document.getElementById('game_toggle');
+const instructionBtnEl = document.getElementById('instruction_toggle');
+const boardEl = document.getElementById('board');
+const mineCounterEl = document.getElementById('mine_count');
+const timerEl = document.getElementById('timer');
 
 const customRow = document.getElementById('row');
 const customHeight = document.getElementById('height');
@@ -78,10 +82,10 @@ document.getElementById('board').addEventListener('click',handleChoice);
 document.getElementById('board').addEventListener('contextmenu',flag);
 document.getElementById('board').addEventListener('mousedown',handleSweep);
 
-playAgainBtn.addEventListener('click',reset);
-newGameBtn.addEventListener('click',reset);
-gameBtn.addEventListener('click',toggle_game_menu);
-instructionBtn.addEventListener('click',toggle_instructions);
+playAgainBtnEl.addEventListener('click',reset);
+newGameBtnEl.addEventListener('click',reset);
+difficultyBtnEl.addEventListener('click',toggle_game_menu);
+instructionBtnEl.addEventListener('click',toggle_instructions);
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 FUNCTIONS
@@ -121,10 +125,11 @@ function renderControls(){
 
 
 function createBoard(row,col,mines){
+    
     let boardSize = row*col;
     const coordinates = generateMines(mines, boardSize);
+    createStatus(mines);
     createCells(row,col,coordinates);
-    createMines(mines);
     calculateAdj();
 }
 
@@ -140,11 +145,10 @@ function createCells(row,col,arr){
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
             cell.classList.add('tile');
-
             if(arr.includes(count)){
                 board[r][c].isMine=true;
                 let content = document.createElement('img');
-                content.setAttribute("src", "AV/flag.png");
+                content.setAttribute("src", "AV/bomb.png");
                 
                 cell.appendChild(content);
             }
@@ -152,10 +156,6 @@ function createCells(row,col,arr){
             count++;
         }
     }
-}
-
-function createMines(mines){
-
 }
 
 function calculateAdj(){
@@ -212,8 +212,6 @@ function reset(){
 
   function generateMines(total, size){
     let rands = [];
-    console.log(mines);
-    console.log(total);
     while(rands.length < total){
         const r = Math.floor(Math.random() * size);
         if(rands.indexOf(r)!==-1){
@@ -222,7 +220,22 @@ function reset(){
         else{
             rands.push(r);
         }
-        console.log(rands)
     }
     return rands;
 } 
+
+function createStatus(mines){
+    mineCounterEl.innerText = mines;
+    let elapsedTime = 0;
+    timerEl.innerHTML = elapsedTime;
+    const timerId = setInterval(function() {
+      if (elapsedTime < 1000){
+        if(gameOver)return;
+        timerEl.innerText = elapsedTime;
+        elapsedTime++;
+        }
+        else{
+          clearInterval(timerId);  // BUG FIX
+        }
+     }, 1000);
+  }

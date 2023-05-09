@@ -63,7 +63,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 #mine_count{
     grid-column-start: 1;
-    width: 40px;
+    text-align: right;
 }
 
 #smiley_face{
@@ -75,9 +75,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 #timer{
     grid-column-start: 3;
-    align-self: right;
-    width: 40px;
-    
+    align-self: right; 
 }
 
 #board{
@@ -108,6 +106,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .counter{
     background-color: black;
     color: red;
+    width: 30px;
 }
 
 .button_info{
@@ -148,12 +147,10 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     border: .01px solid black;
     width: 40px;
     height: 40px;
-    justify-content: center;
 }
 
 .tile > img{
     display: flex;
-    width: 20px;
-    height: 20px;
-    
+    width: 40px;
+    height: 40px;
 }
