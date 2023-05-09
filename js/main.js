@@ -29,9 +29,10 @@ CELL CLASS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
 class Cell{
-    constructor(row,col){
+    constructor(row,col,num){
         this.column = col;
         this.row = row;
+        this.coordinate=num;
         this.isMine = false;
         this.isRevealed = false;
         this.isFlagged = false;
@@ -115,27 +116,40 @@ function renderBoard(){
 function renderMessage(){
 }
 
-function renderControls() {
+function renderControls(){
 }
 
 
 function createBoard(row,col,mines){
-    createCells(row,col);
+    let boardSize = row*col;
+    const coordinates = generateMines(mines, boardSize);
+    createCells(row,col,coordinates);
     createMines(mines);
     calculateAdj();
 }
 
-function createCells(row,col){
-    for(let r=0;r<row;r++){
+function createCells(row,col,arr){
+    count =1;
+    for(let r=1;r<(row+1);r++){
         board[r]=[];
         let row_index = document.createElement('tr');
         boardEl.appendChild(row_index);
         row_index.id=`r${r}`;
-        for(let c=0;c<col;c++){
-            board[r][c]=new Cell(row,col);
+        for(let c=1;c<(col+1);c++){
+            board[r][c]=new Cell(row,col,count);
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
+            cell.classList.add('tile');
+
+            if(arr.includes(count)){
+                board[r][c].isMine=true;
+                let content = document.createElement('img');
+                content.setAttribute("src", "AV/flag.png");
+                
+                cell.appendChild(content);
+            }
             row_index.appendChild(cell);
+            count++;
         }
     }
 }
@@ -149,12 +163,16 @@ function calculateAdj(){
 }
 
 function handleChoice(event){
+    let index = event.target.id;
+    console.log("Handle Choice: "+index);
 }
 
 function handleSweep(event){
+ //   console.log("Handle sweep: "+event.target);
 }
 
 function flag(event){
+    //console.log("Handle flag: "+event.target);
 }
 
 function toggle_game_menu(event){
@@ -191,3 +209,20 @@ function reset(){
         createBoard(DIF_SET[difficulty][0],DIF_SET[difficulty][1],DIF_SET[difficulty][2]);
     }
 }
+
+  function generateMines(total, size){
+    let rands = [];
+    console.log(mines);
+    console.log(total);
+    while(rands.length < total){
+        const r = Math.floor(Math.random() * size);
+        if(rands.indexOf(r)!==-1){
+            continue;
+        }
+        else{
+            rands.push(r);
+        }
+        console.log(rands)
+    }
+    return rands;
+} 

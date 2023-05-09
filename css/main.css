@@ -19,7 +19,7 @@ body{
 header{
     font-size: 4vmin;
     letter-spacing: .5vmin;
-    position: absolute;
+
     top: 10px;
 }
 
@@ -27,13 +27,7 @@ table{
     border: .01px solid black;
 }
 
-tr{
-    border: .01px solid black;
-}
 
-td{
-    border: .01px solid black;
-}
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     DIV IDS
@@ -44,8 +38,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     border-radius: 1vmin;
     border: 0.1 solid black;
     background-color: darkgray;
-    height: 40%;
-    width: 80%;
+
 }
 
 #menu{
@@ -76,7 +69,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #smiley_face{
     display: flex;
     height: 25px;
-    width:25px;
+    width: 25px;
     justify-content: center;
 }
 
@@ -90,9 +83,6 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #board{
     border: 1px solid black;
     margin: 10px;
-    height: 83%;
-    width: 97%; 
-
 }
 
 #footer{
@@ -152,4 +142,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     display: flex;
     background-color: blue;
     color: white;
+}
+
+.tile{
+    border: .01px solid black;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+}
+
+.tile > img{
+    display: flex;
+    width: 20px;
+    height: 20px;
+    
 }
