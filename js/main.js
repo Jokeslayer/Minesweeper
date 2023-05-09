@@ -130,18 +130,18 @@ function createBoard(row,col,mines){
     const coordinates = generateMines(mines, boardSize);
     createStatus(mines);
     createCells(row,col,coordinates);
-    calculateAdj();
+    createAdjNumbers();
 }
 
 function createCells(row,col,arr){
     count =1;
-    for(let r=1;r<(row+1);r++){
+    for(let r=0;r<(row);r++){
         board[r]=[];
         let row_index = document.createElement('tr');
         boardEl.appendChild(row_index);
         row_index.id=`r${r}`;
-        for(let c=1;c<(col+1);c++){
-            board[r][c]=new Cell(row,col,count);
+        for(let c=0;c<(col);c++){
+            board[r][c]=new Cell(r,c,count);
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
             cell.classList.add('tile');
@@ -158,13 +158,28 @@ function createCells(row,col,arr){
     }
 }
 
-function calculateAdj(){
-
+function createAdjNumbers(){
+    for(let r=0;r<board.length;r++){
+        for(let c=0;c<board[r].length;c++){
+            if(board[r][c].isMine) continue;
+            else{
+                
+            }
+        }
+    }
 }
 
 function handleChoice(event){
     let index = event.target.id;
-    console.log("Handle Choice: "+index);
+    let loc = getCoordinates(index);
+    console.log(index)
+    if(board[loc[0]][loc[1]].isMine){
+        gameOver=true;
+    }
+    else if(board[loc[0]][loc[1]].isRevealed===false){
+        board[loc[0]][loc[1]].isRevealed = true;
+    }
+    render();
 }
 
 function handleSweep(event){
@@ -198,10 +213,7 @@ function toggle_instructions(event){
 function reset(){
     boardEl.innerHTML = '';
     board = [];
-    console.log(customHeight.value);
-    console.log(customRow.value);
     difficulty = document.querySelector('input[name="difficulty"]:checked').value;
-    console.log(difficulty);
     if(difficulty === "custom"){
         createBoard(customRow.value,customHeight.value,customMines.value);
     }
@@ -238,4 +250,11 @@ function createStatus(mines){
           clearInterval(timerId);  // BUG FIX
         }
      }, 1000);
+  }
+
+  function getCoordinates(target){
+    let chop = target.split('');
+    let result = [chop[1],chop[3]];
+    result = result.map(Number);
+    return result
   }
