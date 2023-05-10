@@ -54,11 +54,6 @@ class Cell{
         if(board[r][c].isMine) return 1;
         return 0;
     }
-    
-
-    clear(){
-
-    }
 }
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -158,6 +153,7 @@ function renderBoard(){
             cell.id=`r${r}c${c}`;
             cell.classList.add('tile');
             if (board[r][c].isRevealed){
+                cell.style.boxShadow = 'none';
                 if(mineList.includes(count)){
                     let content = document.createElement('img');
                     content.setAttribute("src", "av_files/bomb.png");
@@ -217,14 +213,14 @@ function createCells(row,col){
 function createAdjNumbers(row,col){
     let adjMineCount = 0;
     if(board[row][col].isMine) return;
-    adjMineCount = adjMineCount + checkNeighbor((row+1),col);
-    adjMineCount = adjMineCount + checkNeighbor((row+1),(col-1));
-    adjMineCount = adjMineCount + checkNeighbor((row+1),(col+1));
-    adjMineCount = adjMineCount + checkNeighbor((row-1),col);
-    adjMineCount = adjMineCount + checkNeighbor((row-1),(col-1));
-    adjMineCount = adjMineCount + checkNeighbor((row-1),(col+1));
-    adjMineCount = adjMineCount + checkNeighbor(row,(col-1));
-    adjMineCount = adjMineCount + checkNeighbor(row,(col+1));
+    adjMineCount += checkNeighbor((row+1),col);
+    adjMineCount += checkNeighbor((row+1),(col-1));
+    adjMineCount += checkNeighbor((row+1),(col+1));
+    adjMineCount += checkNeighbor((row-1),col);
+    adjMineCount += checkNeighbor((row-1),(col-1));
+    adjMineCount += checkNeighbor((row-1),(col+1));
+    adjMineCount += checkNeighbor(row,(col-1));
+    adjMineCount += checkNeighbor(row,(col+1));
 
     return adjMineCount;
 }
@@ -247,12 +243,15 @@ function handleChoice(event){
     }
     let loc = getCoordinates(index);
     console.log(board[loc[0]][loc[1]]);
-    if (board[loc[0]][loc[1]].isFlagged || board[loc[0]][loc[1]].isFlagged){
+    if (board[loc[0]][loc[1]].isFlagged || board[loc[0]][loc[1]].isRevealed){
         return;
     }else if(board[loc[0]][loc[1]].isMine){
         board[loc[0]][loc[1]].isRevealed = true;
         gameOver = true;
-    } else{
+    } else if(board[loc[0]][loc[1]].adjMineCount === 0){
+        reveal(board[loc[0]][loc[1]]);
+    }
+    else {
         board[loc[0]][loc[1]].isRevealed = true;
     }
     render();
@@ -334,3 +333,52 @@ function getCoordinates(target){
     return result
 }
 
+function reveal(cell){
+    let neighbor;
+    cell.isRevealed = true;
+    if(cell.adjMineCount === 0){
+        if(isInBounds(board[cell.row+1][cell.col])){
+            revealNeighbor(board[cell.row+1][cell.col]);
+        }
+
+        if(isInBounds(board[cell.row+1][cell.col-1])){
+            revealNeighbor(board[cell.row+1][cell.col-1]);
+        }
+
+        if(isInBounds(board[cell.row+1][cell.col+1])){
+            revealNeighbor(board[cell.row+1][cell.col+1]);
+        }
+
+        if(isInBounds(board[cell.row-1][cell.col])){
+            revealNeighbor(board[cell.row-1][cell.col]);
+        }
+
+        if(isInBounds(board[cell.row-1][cell.col-1])){
+            revealNeighbor(board[cell.row-1][cell.col-1]);
+        }
+
+        if(isInBounds(board[cell.row-1][cell.col+1])){
+            revealNeighbor(board[cell.row-1][cell.col+1]);
+        }
+
+        if(isInBounds(board[cell.row][cell.col-1])){
+            revealNeighbor(board[cell.row][cell.col-1]);
+        }
+
+        if(isInBounds(board[cell.row][cell.col+1])){
+            revealNeighbor(board[cell.row][cell.col+1]);
+        }
+    }
+}
+
+function revealNeighbor(cell){
+    if ((board[cell.row][cell.col].isRevealed===false) && (board[cell.row][cell.col].isMine ===false)){
+      return reveal(cell);  
+    } 
+    return;
+}
+
+function isInBounds(row, col) {
+    return (row >= 0 && row < board.length && col >= 0 && col < board[0].length);
+  }
+  
