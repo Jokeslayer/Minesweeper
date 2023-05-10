@@ -334,41 +334,42 @@ function getCoordinates(target){
 }
 
 function reveal(cell){
-    let neighbor;
     cell.isRevealed = true;
     if(cell.adjMineCount === 0){
-        if(isInBounds(board[cell.row+1][cell.col])){
+        debugger
+        if(isInBounds((cell.row+1),cell.col)){
             revealNeighbor(board[cell.row+1][cell.col]);
         }
 
-        if(isInBounds(board[cell.row+1][cell.col-1])){
+        if(isInBounds(cell.row+1),(cell.col-1)){
             revealNeighbor(board[cell.row+1][cell.col-1]);
         }
 
-        if(isInBounds(board[cell.row+1][cell.col+1])){
+        if(isInBounds((cell.row+1),(cell.col+1))){
             revealNeighbor(board[cell.row+1][cell.col+1]);
         }
 
-        if(isInBounds(board[cell.row-1][cell.col])){
+        if(isInBounds((cell.row-1),cell.col)){
             revealNeighbor(board[cell.row-1][cell.col]);
         }
 
-        if(isInBounds(board[cell.row-1][cell.col-1])){
+        if(isInBounds((cell.row-1),(cell.col-1))){
             revealNeighbor(board[cell.row-1][cell.col-1]);
         }
 
-        if(isInBounds(board[cell.row-1][cell.col+1])){
+        if(isInBounds((cell.row-1),(cell.col+1))){
             revealNeighbor(board[cell.row-1][cell.col+1]);
         }
 
-        if(isInBounds(board[cell.row][cell.col-1])){
+        if(isInBounds(cell.row,(cell.col-1))){
             revealNeighbor(board[cell.row][cell.col-1]);
         }
 
-        if(isInBounds(board[cell.row][cell.col+1])){
+        if(isInBounds(cell.row,(cell.col+1))){
             revealNeighbor(board[cell.row][cell.col+1]);
         }
     }
+    return;
 }
 
 function revealNeighbor(cell){
