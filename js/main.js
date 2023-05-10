@@ -1,7 +1,7 @@
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     Constants
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
-const AUDIO = new Audio('AV/wtf_boom.mp3');
+const AUDIO = new Audio('av_files/wtf_boom.mp3');
 
 const COLORS = {
     '1': 'blue',
@@ -36,9 +36,8 @@ class Cell{
         this.isFlagged = false;
         this.adjMineCount = 0;
     }
-/* 
-    createAdjNumbers(){
 
+    createAdjNumbers(){
         this.adjMineCount = this.adjMineCount + checkNeighbor(this.row++,this.col);
         console.log(this.adjMineCount)
         this.adjMineCount = this.adjMineCount + checkNeighbor(this.row++,this.col--);
@@ -54,7 +53,7 @@ class Cell{
         if(r < 0 || r >= board.length || c < 0 || c >= board[r].length) return 0;
         if(board[r][c].isMine) return 1;
         return 0;
-    } */
+    }
     
 
     clear(){
@@ -94,7 +93,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 document.getElementById('board').addEventListener('click',handleChoice);
 document.getElementById('board').addEventListener('contextmenu',flag);
-//document.getElementById('board').addEventListener('mousedown',handleSweep);
+
 
 playAgainBtnEl.addEventListener('click',init);
 newGameBtnEl.addEventListener('click',init);
@@ -158,16 +157,24 @@ function renderBoard(){
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
             cell.classList.add('tile');
-            if(mineList.includes(count)){
-                let content = document.createElement('img');
-                content.setAttribute("src", "AV/bomb.png");
-                cell.appendChild(content);
+            if (board[r][c].isRevealed){
+                if(mineList.includes(count)){
+                    let content = document.createElement('img');
+                    content.setAttribute("src", "av_files/bomb.png");
+                    cell.appendChild(content);
+                }
+                if(board[r][c].adjMineCount > 0){
+                    cell.innerText = board[r][c].adjMineCount;
+                    cell.style.color = COLORS[board[r][c].adjMineCount];
+                    cell.classList.add('adj_num');
+                }
             }
             if(board[r][c].isFlagged){
                 let content = document.createElement('img');
-                content.setAttribute("src", "AV/flag.png");
+                content.setAttribute("src", "av_files/flag.png");
                 cell.appendChild(content);
             }
+            
             row_index.appendChild(cell);
             count++;
         }
@@ -176,12 +183,11 @@ function renderBoard(){
 
 
 
-function createBoard(row,col,mines){
-    
-    
+function createBoard(row,col,mines){    
     createStatus(mines);
     createCells(row,col);
-    //populateAdjNumbers(row,col);
+    populateAdjNumbers(row,col);
+    render();
 }
 
 function createCells(row,col){
@@ -199,42 +205,74 @@ function createCells(row,col){
     }
 }
 
-/* function populateAdjNumbers(row, col){
+ function populateAdjNumbers(row, col){
     for(let r=0;r<board.length;r++){
         for(let c=0;c<board[r].length;c++){
-            board[r][c].createAdjNumbers();
-            console.log(board[r][c].adjMineCount);
+            let adj = createAdjNumbers(r,c);
+            board[r][c].adjMineCount = adj;
         }
     }
-} */
+}
+
+function createAdjNumbers(row,col){
+    let adjMineCount = 0;
+    if(board[row][col].isMine) return;
+    adjMineCount = adjMineCount + checkNeighbor((row+1),col);
+    adjMineCount = adjMineCount + checkNeighbor((row+1),(col-1));
+    adjMineCount = adjMineCount + checkNeighbor((row+1),(col+1));
+    adjMineCount = adjMineCount + checkNeighbor((row-1),col);
+    adjMineCount = adjMineCount + checkNeighbor((row-1),(col-1));
+    adjMineCount = adjMineCount + checkNeighbor((row-1),(col+1));
+    adjMineCount = adjMineCount + checkNeighbor(row,(col-1));
+    adjMineCount = adjMineCount + checkNeighbor(row,(col+1));
+
+    return adjMineCount;
+}
+
+function checkNeighbor(r,c){
+    if (r < 0 || r >= board.length || c < 0 || c >= board[r].length) return 0;
+
+    if (board[r][c].isMine){
+      return 1;  
+    } 
+    return 0;
+}
 
 function handleChoice(event){
-    
-    let index = event.target.id;
-    let loc = getCoordinates(index);
-    console.log(board[loc[0]][loc[1]].ro)
-    if(board[loc[0]][loc[1]]){
-        gameOver=true;
+    let index;
+    if (event.target.tagName === 'IMG'){
+        index = event.target.parentElement.id;
+    } else {
+        index = event.target.id;
     }
-    else if(board[loc[0]][loc[1]].isRevealed===false){
+    let loc = getCoordinates(index);
+    console.log(board[loc[0]][loc[1]]);
+    if (board[loc[0]][loc[1]].isFlagged || board[loc[0]][loc[1]].isFlagged){
+        return;
+    }else if(board[loc[0]][loc[1]].isMine){
+        board[loc[0]][loc[1]].isRevealed = true;
+        gameOver = true;
+    } else{
         board[loc[0]][loc[1]].isRevealed = true;
     }
     render();
 }
 
-/* function handleSweep(event){
-    console.log("mousedown: "+event.target);
-} */
-
 function flag(event){
-    let index = event.target.id;
+    event.preventDefault();
+    let index;
+    if (event.target.tagName === 'IMG'){
+        index = event.target.parentElement.id;
+    } else {
+        index = event.target.id;
+    }
     let loc = getCoordinates(index);
-    if(board[loc[0]][loc[1]].isFlagged){
-        board[loc[0]][loc[1]].isFlagged = false;
-    }
+    if(board[loc[0]][loc[1]].isRevealed) return;
     else{
-        board[loc[0]][loc[1]].isFlagged = true;
+        console.log('flagging')
+        board[loc[0]][loc[1]].isFlagged = !board[loc[0]][loc[1]].isFlagged;
     }
+
     render();
 }
 
