@@ -69,6 +69,7 @@ let board=[];
 let difficulty;           //determines the size of the game board
 let winner;        // null = no winner, 1 or -1 winner, T = tied game
 let gameOver;     // boolean which determines whether a bomb has been clicked on
+let mineList = []
 
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -93,7 +94,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 document.getElementById('board').addEventListener('click',handleChoice);
 document.getElementById('board').addEventListener('contextmenu',flag);
-document.getElementById('board').addEventListener('mousedown',handleSweep);
+//document.getElementById('board').addEventListener('mousedown',handleSweep);
 
 playAgainBtnEl.addEventListener('click',init);
 newGameBtnEl.addEventListener('click',init);
@@ -114,12 +115,15 @@ function init() {
     difficulty = document.querySelector('input[name="difficulty"]:checked').value;
     if(difficulty === "custom"){
         let boardSize = customRow.value*customHeight.value;
-        const mines = generateMines()
+        mineList = generateMines(customMines.value,boardSize);
         createBoard(customRow.value,customHeight.value,customMines.value);
 
     }
     else{
+        let boardSize = DIF_SET[difficulty][0]*DIF_SET[difficulty][1];
+        mineList = generateMines(DIF_SET[difficulty][2],boardSize);
         createBoard(DIF_SET[difficulty][0],DIF_SET[difficulty][1],DIF_SET[difficulty][2]);
+
     }    
     winner = null;
     gameOver = false;
@@ -143,22 +147,25 @@ function render(){
     renderBoard();
 }
 
-function renderBoard(arr){
+function renderBoard(){
+    boardEl.innerHTML='';
     count =1;
-    for(let r=0;r<row;r++){
-        board[r]=[];
+    for(let r=0;r<board.length;r++){
         let row_index = document.createElement('tr');
         boardEl.appendChild(row_index);
         row_index.id=`r${r}`;
-        for(let c=0;c<col;c++){
-            board[r][c]=new Cell(r,c,count);
+        for(let c=0;c<board[r].length;c++){
             let cell=document.createElement('td');
             cell.id=`r${r}c${c}`;
             cell.classList.add('tile');
-            if(arr.includes(count)){
-                board[r][c].isMine=true;
+            if(mineList.includes(count)){
                 let content = document.createElement('img');
                 content.setAttribute("src", "AV/bomb.png");
+                cell.appendChild(content);
+            }
+            if(board[r][c].isFlagged){
+                let content = document.createElement('img');
+                content.setAttribute("src", "AV/flag.png");
                 cell.appendChild(content);
             }
             row_index.appendChild(cell);
@@ -167,37 +174,26 @@ function renderBoard(arr){
     }
 }
 
-function renderMessage(){
-}
 
 
 function createBoard(row,col,mines){
     
     
     createStatus(mines);
-    createCells(row,col,coordinates);
+    createCells(row,col);
     //populateAdjNumbers(row,col);
 }
 
-function createCells(row,col,arr){
+function createCells(row,col){
     count =1;
     for(let r=0;r<row;r++){
         board[r]=[];
- 
-        boardEl.appendChild(row_index);
-        row_index.id=`r${r}`;
         for(let c=0;c<col;c++){
             board[r][c]=new Cell(r,c,count);
-            let cell=document.createElement('td');
-            cell.id=`r${r}c${c}`;
-            cell.classList.add('tile');
-            if(arr.includes(count)){
+            if(mineList.includes(count)){
                 board[r][c].isMine=true;
-                let content = document.createElement('img');
-                content.setAttribute("src", "AV/bomb.png");
-                cell.appendChild(content);
+            
             }
-            row_index.appendChild(cell);
             count++;
         }
     }
@@ -226,12 +222,20 @@ function handleChoice(event){
     render();
 }
 
-function handleSweep(event){
- //   console.log("Handle sweep: "+event.target);
-}
+/* function handleSweep(event){
+    console.log("mousedown: "+event.target);
+} */
 
 function flag(event){
-    //console.log("Handle flag: "+event.target);
+    let index = event.target.id;
+    let loc = getCoordinates(index);
+    if(board[loc[0]][loc[1]].isFlagged){
+        board[loc[0]][loc[1]].isFlagged = false;
+    }
+    else{
+        board[loc[0]][loc[1]].isFlagged = true;
+    }
+    render();
 }
 
 function toggle_game_menu(event){
