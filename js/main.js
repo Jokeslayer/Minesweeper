@@ -28,7 +28,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 class Cell{
     constructor(row,col,num){
-        this.column = col;
+        this.col = col;
         this.row = row;
         this.coordinate=num;
         this.isMine = false;
@@ -336,12 +336,12 @@ function getCoordinates(target){
 function reveal(cell){
     cell.isRevealed = true;
     if(cell.adjMineCount === 0){
-        debugger
+
         if(isInBounds((cell.row+1),cell.col)){
             revealNeighbor(board[cell.row+1][cell.col]);
         }
 
-        if(isInBounds(cell.row+1),(cell.col-1)){
+        if(isInBounds((cell.row+1),(cell.col-1))){
             revealNeighbor(board[cell.row+1][cell.col-1]);
         }
 
