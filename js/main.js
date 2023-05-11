@@ -3,7 +3,6 @@
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 const AUDIO = new Audio('av_files/wtf_boom.mp3');
 
-
 //Color code for the numbers that denote the number of Adjacent mines
 const COLORS = {
     '1': 'blue',
@@ -60,6 +59,8 @@ const playAgainBtnEl = document.getElementById('smiley_face');
 const newGameBtnEl = document.getElementById('footer');
 const difficultyBtnEl = document.getElementById('game_toggle');
 const instructionBtnEl = document.getElementById('instruction_toggle');
+const closeBtnEl1 = document.getElementById('x1');
+const closeBtnEl2 = document.getElementById('x2');
 const boardEl = document.getElementById('board');
 const mineCounterEl = document.getElementById('mine_count');
 const timerEl = document.getElementById('timer');
@@ -74,16 +75,18 @@ const customMines = document.getElementById('mines');
 EVENT LISTENERS
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
-
 //Event Listeners for left and right clicking on the board
-document.getElementById('board').addEventListener('click', handleChoice);
-document.getElementById('board').addEventListener('contextmenu', flag);
+boardEl.addEventListener('click', handleChoice);
+boardEl.addEventListener('contextmenu', flag);
 
 //Event listeners for game Buttons
 playAgainBtnEl.addEventListener('click', init);
 newGameBtnEl.addEventListener('click', init);
-difficultyBtnEl.addEventListener('click', toggle_game_menu);
-instructionBtnEl.addEventListener('click', toggle_instructions);
+difficultyBtnEl.addEventListener('click', (event) => {toggler(event, optionsMenuEl);});
+instructionBtnEl.addEventListener('click', (event) => {toggler(event, instructionsMenuEl);});
+
+closeBtnEl1.addEventListener('click', (event) => {toggler(event, optionsMenuEl);});
+closeBtnEl2.addEventListener('click', (event) => {toggler(event, instructionsMenuEl);});
 
 /*
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -161,11 +164,11 @@ function render() {
     }
 }
 
-function toggle_game_menu(event) {
-    if (optionsMenuEl.style.visibility === 'hidden') {
-        optionsMenuEl.style.visibility = 'visible';
+function toggler(event, arg) {
+    if (arg.style.visibility === 'hidden') {
+        arg.style.visibility = 'visible';
     } else {
-        optionsMenuEl.style.visibility = 'hidden';
+        arg.style.visibility = 'hidden';
     }
 }
 
@@ -226,18 +229,18 @@ function createCells(row, col) {
 
 //iterates through board and calculates each Cell's adjMineCount class attribute
 //helper function of createBoard
-function createAdjNumbers(){
-    for(let r = 0; r < board.length; r++){
-        for(let c = 0; c < board[r].length; c++){
-            if(board[r][c].isMine) continue;
-            board[r][c].adjMineCount += checkNeighbor(r+1,c);
-            board[r][c].adjMineCount += checkNeighbor(r+1,c-1);
-            board[r][c].adjMineCount += checkNeighbor(r+1,c+1);
-            board[r][c].adjMineCount += checkNeighbor(r-1,c);
-            board[r][c].adjMineCount += checkNeighbor(r-1,c-1);
-            board[r][c].adjMineCount += checkNeighbor(r-1,c+1);
-            board[r][c].adjMineCount += checkNeighbor(r,c-1);
-            board[r][c].adjMineCount += checkNeighbor(r,c+1);
+function createAdjNumbers() {
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            if (board[r][c].isMine) continue;
+            board[r][c].adjMineCount += checkNeighbor(r + 1, c);
+            board[r][c].adjMineCount += checkNeighbor(r + 1, c - 1);
+            board[r][c].adjMineCount += checkNeighbor(r + 1, c + 1);
+            board[r][c].adjMineCount += checkNeighbor(r - 1, c);
+            board[r][c].adjMineCount += checkNeighbor(r - 1, c - 1);
+            board[r][c].adjMineCount += checkNeighbor(r - 1, c + 1);
+            board[r][c].adjMineCount += checkNeighbor(r, c - 1);
+            board[r][c].adjMineCount += checkNeighbor(r, c + 1);
         }
     }
 }
@@ -274,7 +277,7 @@ function handleChoice(event) {
     board[row][col].isRevealed = true;
     if (board[row][col].isMine) {
         gameOver = true;
-    
+
     } else if (board[row][col].adjMineCount === 0) {
         reveal(board[row][col]);
     }
@@ -290,7 +293,7 @@ function flag(event) {
     const col = parseInt(index[3]);
     if (board[row][col].isRevealed || winner || gameOver) return;
     board[row][col].isFlagged = !board[row][col].isFlagged;
-    board[row][col].isFlagged ? mineCounterEl.innerText = --mineNum : mineCounterEl.innerText = ++mineNum; ;
+    board[row][col].isFlagged ? mineCounterEl.innerText = --mineNum : mineCounterEl.innerText = ++mineNum;;
     render();
 }
 

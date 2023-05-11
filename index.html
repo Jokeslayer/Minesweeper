@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,30 +10,34 @@
     <title>Minesweeper</title>
     <link rel="icon" type="image/x-icon" href="av_files/bomb.png">
 </head>
+
 <body>
     <header>Minesweeper</header>
+
     
-    <div id="menu">
-        <button id="game_toggle">Game</button>
-        <button id="instruction_toggle">Controls</button>
-    </div>
     <div id="foundation">
+        <div id="menu">
+            <button id="game_toggle">Game</button>
+            <button id="instruction_toggle">Controls</button>
+        </div>
         <div id="status">
             <div class="counter" id="mine_count">000</div>
-            <button class="new_game_button" id="smiley_face"><img id="icon" src="av_files/smiley_face.png" height="20px" width="20"></button>
+            <button class="new_game_button" id="smiley_face"><img id="icon" src="av_files/smiley_face.png" height="20px"
+                    width="20"></button>
             <div class="counter" id="timer">000</div>
         </div>
         <table id="board">
 
         </table>
-        
-        
+
+
     </div>
     <div class="button_info" id="options">
-        <div class="header">Options <button class="ex_out">X</button></div>
+        <div class="header">Options <button class="ex_out" id="x1">X</button></div>
         <table id="difficulty_level">
             <tr>
-                <th></th><th></th>
+                <th></th>
+                <th></th>
                 <th>Width</th>
                 <th>Height</th>
                 <th>Mines</th>
@@ -61,15 +66,15 @@
             <tr>
                 <td><input id="custom" type="radio" name="difficulty" value="custom"></td>
                 <td>Custom</td>
-                <td><input type="number" name="difficulty" value="1" min="1" max="50" id="row" ></td>
-                <td><input type="number" name="difficulty" value="1" min="1" max="50" id="height" ></td>
-                <td><input type="number" name="difficulty" value="0" min="0" max="999" id="mines" ></td>
+                <td><input type="number" name="difficulty" value="1" min="1" max="50" id="row"></td>
+                <td><input type="number" name="difficulty" value="1" min="1" max="50" id="height"></td>
+                <td><input type="number" name="difficulty" value="0" min="0" max="999" id="mines"></td>
             </tr>
-          </table>
-          <button id="footer">New Game</button> 
+        </table>
+        <button id="footer">New Game</button>
     </div>
     <div class="button_info" id="instructions">
-        <div class="header">Controls <button class="ex_out">X</button> </div>
+        <div class="header">Controls <button class="ex_out" id="x2">X</button> </div>
         <div class="button_content">
             <ul>
                 <li><b>Left-Click</b> an empty square to reveal it.</li>
