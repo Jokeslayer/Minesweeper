@@ -63,7 +63,8 @@ let board=[];
 let difficulty;           //determines the size of the game board
 let winner;        // null = no winner, 1 or -1 winner, T = tied game
 let gameOver;     // boolean which determines whether a bomb has been clicked on
-let mineList = []
+let mineList = [];
+let mineNum;
 
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -102,7 +103,6 @@ init();
 
 // Initialize state and call render
 function init() {
-    console.log('push the button')
     timerEl.innerHTML='';
     boardEl.innerHTML = '';
     board = [];
@@ -111,15 +111,13 @@ function init() {
         let boardSize = customRow.value*customHeight.value;
         mineList = generateMines(customMines.value,boardSize);
         createBoard(customRow.value,customHeight.value,customMines.value);
-
     }
     else{
         let boardSize = DIF_SET[difficulty][0]*DIF_SET[difficulty][1];
         mineList = generateMines(DIF_SET[difficulty][2],boardSize);
         createBoard(DIF_SET[difficulty][0],DIF_SET[difficulty][1],DIF_SET[difficulty][2]);
-
     }    
-    winner = null;
+    winner = false;
     gameOver = false;
     render();
 }
@@ -127,21 +125,27 @@ function init() {
 function getWinner(){
     for(let r=0;r<board.length;r++){
         for(let c=0;c<board[r].length;c++){
-            if(board[r][c].isMine) continue;
-            if(board[r][c].isRevealed) continue;
-            if(board[r][c].isRevealed===false)return false;
+            if(board[r][c].isRevealed ===false && board[r][c].isMine ===true) continue;
+            if(board[r][c].isRevealed ===false) return;
         }
     }
-    return true
+    winner = true;
 }
-
 
 //digitalize state
 function render(){
-    renderBoard();
+    if (gameOver===true){
+        renderGameOver();
+    } else{
+        renderBoard();
+    }
 }
 
 function renderBoard(){
+    if(winner){
+        document.getElementById("icon").setAttribute("src", "av_files/sunglasses.png");
+    } else document.getElementById("icon").setAttribute("src", "av_files/smiley_face.png");
+    
     boardEl.innerHTML='';
     count =1;
     for(let r=0;r<board.length;r++){
@@ -170,14 +174,50 @@ function renderBoard(){
                 content.setAttribute("src", "av_files/flag.png");
                 cell.appendChild(content);
             }
-            
             row_index.appendChild(cell);
             count++;
         }
     }
 }
 
-
+function renderGameOver(){
+    document.getElementById("icon").setAttribute("src", "av_files/dizzy-face.png");
+    AUDIO.play();
+    boardEl.innerHTML='';
+    count =1;
+    for(let r=0;r<board.length;r++){
+        let row_index = document.createElement('tr');
+        boardEl.appendChild(row_index);
+        row_index.id=`r${r}`;
+        for(let c=0;c<board[r].length;c++){
+            let cell=document.createElement('td');
+            cell.id=`r${r}c${c}`;
+            cell.classList.add('tile');
+            if(mineList.includes(count)){
+                let content = document.createElement('img');
+                content.setAttribute("src", "av_files/explosion.png");
+                cell.appendChild(content);
+            }
+            if (board[r][c].isRevealed){
+                cell.style.boxShadow = 'none';
+                
+                if(board[r][c].adjMineCount > 0){
+                    cell.innerText = board[r][c].adjMineCount;
+                    cell.style.color = COLORS[board[r][c].adjMineCount];
+                    cell.classList.add('adj_num');
+                }
+            }
+            if(board[r][c].isFlagged){
+                let content = document.createElement('img');
+                content.setAttribute("src", "av_files/flag.png");
+                cell.appendChild(content);
+            }
+            
+            row_index.appendChild(cell);
+            count++;
+        }
+    }
+}
 
 function createBoard(row,col,mines){    
     createStatus(mines);
@@ -201,7 +241,7 @@ function createCells(row,col){
     }
 }
 
- function populateAdjNumbers(row, col){
+function populateAdjNumbers(row, col){
     for(let r=0;r<board.length;r++){
         for(let c=0;c<board[r].length;c++){
             let adj = createAdjNumbers(r,c);
@@ -236,6 +276,8 @@ function checkNeighbor(r,c){
 
 function handleChoice(event){
     let index;
+    if (gameOver) return;
+    if (winner) return;
     if (event.target.tagName === 'IMG'){
         index = event.target.parentElement.id;
     } else {
@@ -245,7 +287,7 @@ function handleChoice(event){
     console.log(board[loc[0]][loc[1]]);
     if (board[loc[0]][loc[1]].isFlagged || board[loc[0]][loc[1]].isRevealed){
         return;
-    }else if(board[loc[0]][loc[1]].isMine){
+    } else if(board[loc[0]][loc[1]].isMine){
         board[loc[0]][loc[1]].isRevealed = true;
         gameOver = true;
     } else if(board[loc[0]][loc[1]].adjMineCount === 0){
@@ -254,11 +296,14 @@ function handleChoice(event){
     else {
         board[loc[0]][loc[1]].isRevealed = true;
     }
+    getWinner();
     render();
 }
 
 function flag(event){
     event.preventDefault();
+    if (gameOver) return;
+    if (winner) return;
     let index;
     if (event.target.tagName === 'IMG'){
         index = event.target.parentElement.id;
@@ -313,7 +358,7 @@ function createStatus(mines){
     mineCounterEl.innerText = mines;
     let elapsedTime = 0;
     timerEl.innerHTML='';
-    timerEl.innerHTML = elapsedTime;
+    timerEl.innerHTML=elapsedTime;
     const timerId = setInterval(function() {
       if (elapsedTime < 1000){
         if(gameOver)return;
