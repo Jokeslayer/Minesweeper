@@ -63,7 +63,7 @@ const instructionBtnEl = document.getElementById('instruction_toggle');
 const boardEl = document.getElementById('board');
 const mineCounterEl = document.getElementById('mine_count');
 const timerEl = document.getElementById('timer');
-const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+
 const optionsMenuEl = document.getElementById('options');
 const instructionsMenuEl = document.getElementById('instructions');
 const customRow = document.getElementById('row');
@@ -100,7 +100,8 @@ function init() {
     gameOver = false;
     mineNum = 0;
     elapsedTime = 0;
-
+    const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+    console.log(difficulty)
     if (difficulty === "custom") {
         let boardSize = customRow.value * customHeight.value;
         mineList = generateMines(customMines.value, boardSize);
@@ -273,15 +274,15 @@ function handleChoice(event) {
     board[row][col].isRevealed = true;
     if (board[row][col].isMine) {
         gameOver = true;
-    }
-    if (board[row][col].adjMineCount === 0) {
+    
+    } else if (board[row][col].adjMineCount === 0) {
         reveal(board[row][col]);
     }
     checkWinner();
     render();
 }
 
-
+//handles right clicks
 function flag(event) {
     event.preventDefault();
     let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
@@ -293,6 +294,9 @@ function flag(event) {
     render();
 }
 
+//creates a list of unique random numbers each 
+//less than boardSize, which become the coordinates for the 
+//mines of the current game
 function generateMines(total, boardSize) {
     let rands = [];
     while (rands.length < total) {
@@ -307,7 +311,8 @@ function generateMines(total, boardSize) {
     return rands;
 }
 
-
+// recursively reveals all tiles adjacent to blank (0 adjacent mines)
+// tiles
 function reveal(cell) {
     cell.isRevealed = true;
     if (cell.adjMineCount === 0) {
@@ -347,7 +352,8 @@ function reveal(cell) {
     return;
 }
 
-
+//assists the reveal function by ending the recursive loop if it encounters a cell with a mine
+//continues the recursive loop if not
 function revealNeighbor(cell) {
     if ((board[cell.row][cell.col].isRevealed === false) && (board[cell.row][cell.col].isMine === false)) {
         return reveal(cell);
@@ -355,7 +361,8 @@ function revealNeighbor(cell) {
     return;
 }
 
-
+//assists the revealNeighbor function by checking ensure that it doesnt try
+//to reveal non-existant cells outside the dimensions of board
 function isInBounds(row, col) {
     return (row >= 0 && row < board.length && col >= 0 && col < board[0].length);
 }
