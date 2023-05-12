@@ -50,6 +50,8 @@ let gameOver;       //false by default. Changed to true when you click a Mine
 let mineList;  //list of random numbers that correspond to the coordinates of the mines
 let mineNum;    //the number of mines on the board
 let elapsedTime;
+let firstClick;
+let difficulty;
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 CACHED ELEMENTS
@@ -97,13 +99,14 @@ init();
 // Initialize state and call render
 function init() {
     boardEl.innerHTML = '';
+    firstClick= true;
     board = [];
     mineList = [];
     winner = false;
     gameOver = false;
     mineNum = 0;
     elapsedTime = 0;
-    const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+    difficulty = document.querySelector('input[name="difficulty"]:checked').value;
     console.log(difficulty)
     if (difficulty === "custom") {
         let boardSize = customRow.value * customHeight.value;
@@ -169,14 +172,6 @@ function toggler(event, arg) {
         arg.style.visibility = 'visible';
     } else {
         arg.style.visibility = 'hidden';
-    }
-}
-
-function toggle_instructions(event) {
-    if (instructionsMenuEl.style.visibility === 'hidden') {
-        instructionsMenuEl.style.visibility = 'visible';
-    } else {
-        instructionsMenuEl.style.visibility = 'hidden';
     }
 }
 
@@ -273,6 +268,25 @@ function handleChoice(event) {
     let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
     const row = parseInt(index[1]);
     const col = parseInt(index[3]);
+    if(firstClick){
+        while(board[row][col].isMine ===true || board[row][col].adjMineCount !== 0){
+            if (difficulty === "custom") {
+                let boardSize = customRow.value * customHeight.value;
+                mineList = generateMines(customMines.value, boardSize);
+                createBoard(customRow.value, customHeight.value, customMines.value);
+                mineNum = customMines.value;
+            }
+            else {
+                let boardSize = DIF_SET[difficulty][0] * DIF_SET[difficulty][1];
+                mineList = generateMines(DIF_SET[difficulty][2], boardSize);
+                createBoard(DIF_SET[difficulty][0], DIF_SET[difficulty][1], DIF_SET[difficulty][2]);
+                mineNum = DIF_SET[difficulty][2];
+            }
+        }
+        firstClick = false;
+        reveal(board[row][col]);
+        render();    
+    }
     if (board[row][col].isFlagged || board[row][col].isRevealed || winner || gameOver) return;
     board[row][col].isRevealed = true;
     if (board[row][col].isMine) {
