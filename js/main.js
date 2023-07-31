@@ -50,6 +50,7 @@ let gameOver;       //false by default. Changed to true when you click a Mine
 let mineList;  //list of random numbers that correspond to the coordinates of the mines
 let mineNum;    //the number of mines on the board
 let elapsedTime;
+let gameTime;
 let firstClick;
 let difficulty;
 
@@ -127,6 +128,7 @@ function init() {
 function render() {
     if (winner) {
         document.getElementById("icon").setAttribute("src", "av_files/sunglasses.png");
+        timerOn = false;
     }
     else if (gameOver) {
         AUDIO.play();
@@ -175,35 +177,17 @@ function toggler(event, arg) {
     }
 }
 
+/*-------------------------------------------------------------------------------------------------------------
+STATE CREATION FUNCTIONS
+---------------------------------------------------------------------------------------------------------------*/
+
 //defines the JS data for the game for the render function base itself off
 function createBoard(row, col, mines) {
-    createStatus(mines);
+    mineCounterEl.innerText = mines;
+    mineNum = mines;
     createCells(row, col);
     createAdjNumbers(row, col);
     render();
-}
-
-//creates the mine counter and the game timer
-//helper function of createBoard
-function createStatus(mines) {
-    mineCounterEl.innerText = mines;
-    mineNum = mines;
-    let elapsedTime = 0;
-    timerEl.innerHTML = '';
-    timerEl.innerHTML = elapsedTime;
-    const timerId = setInterval(function () {
-        if (elapsedTime < 1000) {
-            if (gameOver || winner) {
-                elapsedTime = 0;
-                return;
-            }
-            timerEl.innerText = elapsedTime;
-            elapsedTime++;
-        }
-        else {
-            clearInterval(timerId);  // BUG FIX
-        }
-    }, 1000);
 }
 
 //populates the board variable with a 2d array of Cell objects
@@ -240,77 +224,6 @@ function createAdjNumbers() {
     }
 }
 
-//checks if the row and column #s passed in go out of bounds
-//helper function of createAdjNumbers
-function checkNeighbor(r, c) {
-    if (!isInBounds(r, c)) return 0;
-
-    if (board[r][c].isMine) {
-        return 1;
-    }
-    return 0;
-}
-
-//checks to see that the only unrevealed squares on the board
-// are the mines. if so, it changes winner to true
-function checkWinner() {
-    for (let r = 0; r < board.length; r++) {
-        for (let c = 0; c < board[r].length; c++) {
-            if (board[r][c].isRevealed === false && board[r][c].isMine === true) continue;
-            if (board[r][c].isRevealed === false) return;
-        }
-    }
-    winner = true;
-}
-
-//handles left clicks 
-function handleChoice(event) {
-    let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
-    const row = parseInt(index[1]);
-    const col = parseInt(index[3]);
-    if(firstClick){
-        while(board[row][col].isMine ===true || board[row][col].adjMineCount !== 0){
-            if (difficulty === "custom") {
-                let boardSize = customRow.value * customHeight.value;
-                mineList = generateMines(customMines.value, boardSize);
-                createBoard(customRow.value, customHeight.value, customMines.value);
-                mineNum = customMines.value;
-            }
-            else {
-                let boardSize = DIF_SET[difficulty][0] * DIF_SET[difficulty][1];
-                mineList = generateMines(DIF_SET[difficulty][2], boardSize);
-                createBoard(DIF_SET[difficulty][0], DIF_SET[difficulty][1], DIF_SET[difficulty][2]);
-                mineNum = DIF_SET[difficulty][2];
-            }
-        }
-        firstClick = false;
-        reveal(board[row][col]);
-        render();    
-    }
-    if (board[row][col].isFlagged || board[row][col].isRevealed || winner || gameOver) return;
-    board[row][col].isRevealed = true;
-    if (board[row][col].isMine) {
-        gameOver = true;
-
-    } else if (board[row][col].adjMineCount === 0) {
-        reveal(board[row][col]);
-    }
-    checkWinner();
-    render();
-}
-
-//handles right clicks
-function flag(event) {
-    event.preventDefault();
-    let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
-    const row = parseInt(index[1]);
-    const col = parseInt(index[3]);
-    if (board[row][col].isRevealed || winner || gameOver) return;
-    board[row][col].isFlagged = !board[row][col].isFlagged;
-    board[row][col].isFlagged ? mineCounterEl.innerText = --mineNum : mineCounterEl.innerText = ++mineNum;;
-    render();
-}
-
 //creates a list of unique random numbers each 
 //less than boardSize, which become the coordinates for the 
 //mines of the current game
@@ -327,6 +240,28 @@ function generateMines(total, boardSize) {
     }
     return rands;
 }
+
+//
+function startTimer(){
+    const timerId = setInterval(function () {
+        if (elapsedTime < 1000) {
+            if (gameOver || winner) {
+                gameTime=elapsedTime;
+                elapsedTime = 0;
+                return;
+            }
+            timerEl.innerText = elapsedTime;
+            elapsedTime++;
+        }
+        else {
+            clearInterval(timerId);  // BUG FIX
+        }
+    }, 1000);
+}
+
+/*-------------------------------------------------------------------------------------------------------------
+RECURSIVE REVEAL FUNCTION AND HELPERS
+---------------------------------------------------------------------------------------------------------------*/
 
 // recursively reveals all tiles adjacent to blank (0 adjacent mines)
 // tiles
@@ -383,3 +318,80 @@ function revealNeighbor(cell) {
 function isInBounds(row, col) {
     return (row >= 0 && row < board.length && col >= 0 && col < board[0].length);
 }
+
+/*-------------------------------------------------------------------------------------------------------------
+EVENT HANDLER FUNCTIONS
+---------------------------------------------------------------------------------------------------------------*/
+
+//checks if the row and column #s passed in go out of bounds
+//helper function of createAdjNumbers
+function checkNeighbor(r, c) {
+    if (!isInBounds(r, c)) return 0;
+
+    if (board[r][c].isMine) {
+        return 1;
+    }
+    return 0;
+}
+
+//checks to see that the only unrevealed squares on the board
+// are the mines. if so, it changes winner to true
+function checkWinner() {
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            if (board[r][c].isRevealed === false && board[r][c].isMine === true) continue;
+            if (board[r][c].isRevealed === false) return;
+        }
+    }
+    winner = true;
+}
+
+//handles left clicks 
+function handleChoice(event) {
+    let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
+    const row = parseInt(index[1]);
+    const col = parseInt(index[3]);
+    if(firstClick){
+        startTimer();
+        while(board[row][col].isMine ===true || board[row][col].adjMineCount !== 0){
+            if (difficulty === "custom") {
+                let boardSize = customRow.value * customHeight.value;
+                mineList = generateMines(customMines.value, boardSize);
+                createBoard(customRow.value, customHeight.value, customMines.value);
+                mineNum = customMines.value;
+            }
+            else {
+                let boardSize = DIF_SET[difficulty][0] * DIF_SET[difficulty][1];
+                mineList = generateMines(DIF_SET[difficulty][2], boardSize);
+                createBoard(DIF_SET[difficulty][0], DIF_SET[difficulty][1], DIF_SET[difficulty][2]);
+                mineNum = DIF_SET[difficulty][2];
+            }
+        }
+        firstClick = false;
+        reveal(board[row][col]);
+        render();    
+    }
+    if (board[row][col].isFlagged || board[row][col].isRevealed || winner || gameOver) return;
+    board[row][col].isRevealed = true;
+    if (board[row][col].isMine) {
+        gameOver = true;
+        
+    } else if (board[row][col].adjMineCount === 0) {
+        reveal(board[row][col]);
+    }
+    checkWinner();
+    render();
+}
+
+//handles right clicks
+function flag(event) {
+    event.preventDefault();
+    let index = event.target.tagName === 'IMG' ? event.target.parentElement.id : event.target.id;
+    const row = parseInt(index[1]);
+    const col = parseInt(index[3]);
+    if (board[row][col].isRevealed || winner || gameOver) return;
+    board[row][col].isFlagged = !board[row][col].isFlagged;
+    board[row][col].isFlagged ? mineCounterEl.innerText = --mineNum : mineCounterEl.innerText = ++mineNum;;
+    render();
+}
+
